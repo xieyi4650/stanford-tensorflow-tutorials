@@ -61,7 +61,7 @@ def download_one_file(download_url,
                 if unzip_and_remove:
                     with gzip.open(local_dest, 'rb') as f_in, open(local_dest[:-3],'wb') as f_out:
                         shutil.copyfileobj(f_in, f_out)
-                    os.remove(local_dest)
+                    #os.remove(local_dest)
             else:
                 print('The downloaded file has unexpected number of bytes')
 

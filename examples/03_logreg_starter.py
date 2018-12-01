@@ -11,7 +11,7 @@ os.environ['TF_CPP_MIN_LOG_LEVEL']='2'
 
 import numpy as np
 import tensorflow as tf
-import time
+import time, sys
 
 import utils
 
@@ -37,6 +37,8 @@ train_data = train_data.batch(batch_size)
 test_data = None
 #############################
 ########## TO DO ############
+test_data = tf.data.Dataset.from_tensor_slices(test)
+test_data = test_data.batch(batch_size)
 #############################
 
 
@@ -56,6 +58,8 @@ test_init = iterator.make_initializer(test_data)	# initializer for train_data
 w, b = None, None
 #############################
 ########## TO DO ############
+w = tf.get_variable("w", initializer=tf.random_normal([28*28, 10], mean=0.0, stddev=0.01))
+b = tf.get_variable("b", initializer=tf.zeros([10]))
 #############################
 
 
@@ -65,6 +69,7 @@ w, b = None, None
 logits = None
 #############################
 ########## TO DO ############
+logits = tf.add(tf.matmul(img, w), b)
 #############################
 
 
@@ -73,6 +78,9 @@ logits = None
 loss = None
 #############################
 ########## TO DO ############
+entropy = tf.nn.softmax_cross_entropy_with_logits(labels=label, logits=logits,
+        name="entropy")
+loss = tf.reduce_mean(entropy, name="loss")
 #############################
 
 
@@ -81,8 +89,8 @@ loss = None
 optimizer = None
 #############################
 ########## TO DO ############
+optimizer = tf.train.AdamOptimizer(learning_rate).minimize(loss)
 #############################
-
 
 # Step 7: calculate accuracy with test set
 preds = tf.nn.softmax(logits)
